@@ -1,22 +1,15 @@
-import { Application } from 'pixi.js'
+import { animateGrid } from '#pixi/animateGrid'
+import { createApp } from '#pixi/createApp'
+import { getCalculatedGrid } from '#pixi/getCalculatedGrid'
 
-export const initStage = async (stage: HTMLDivElement) => {
-  const app = new Application()
-  await app.init({
-    // fallback properties
-    width: 800,
-    height: 600,
+export const initStage = async (stage: HTMLDivElement | null) => {
+  if (!stage) return
 
-    // auto resize
-    resizeTo: stage,
-    autoDensity: true,
-    resolution: devicePixelRatio,
-  })
-  stage.appendChild(app.canvas)
+  const pixiApp = await createApp(stage)
+  const grid = await getCalculatedGrid(pixiApp)
+
   // eslint-disable-next-line no-console
-  console.log({
-    stage,
-    app,
-  })
-  return app
+  console.log('grid', grid)
+
+  animateGrid(grid, pixiApp)
 }

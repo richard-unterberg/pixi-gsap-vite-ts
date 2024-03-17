@@ -30,7 +30,6 @@ export default defineConfig({
       grayLight: colors.slate[300],
       light: colors.slate[200],
       primary: colors.sky[600],
-      strava: '#fc4c02',
       success: '#27C485',
       warning: '#F1B650',
       error: colors.red[500],
