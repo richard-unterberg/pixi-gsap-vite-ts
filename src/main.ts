@@ -1,24 +1,18 @@
+import '@fontsource/inter/latin-400.css'
+import '@fontsource/inter/latin-700.css'
+import '@unocss/reset/tailwind.css'
+import 'virtual:uno.css'
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+
+import { drawRectangles } from '#pixi/drawRectangles'
+import { initStage } from '#pixi/initStage'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
+  <div class="p-3">here starts the client sided pixi v8 stage ✨</div>
+  <div id="stage"></div>
 `
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+window.addEventListener('load', async () => {
+  const app = await initStage(document.querySelector<HTMLDivElement>('#stage')!)
+  drawRectangles(app)
+})
