@@ -1,4 +1,6 @@
+const simplifiedSize = 18
+
 export const PixiConfig = {
-  tileWidth: 8,
-  tileHeight: 8,
+  tileWidth: simplifiedSize,
+  tileHeight: simplifiedSize,
 }

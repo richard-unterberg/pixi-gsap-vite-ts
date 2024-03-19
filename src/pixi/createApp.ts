@@ -35,6 +35,7 @@ export const createApp = async (stage: HTMLDivElement) => {
     antialias: true,
     resolution: window.devicePixelRatio || 1,
     sharedTicker: true,
+    backgroundColor: 0x020617,
   })
   stage.appendChild(app.canvas)
 

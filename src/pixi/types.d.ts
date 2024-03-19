@@ -4,7 +4,6 @@ export type Tile = {
   id: number
   x: number
   y: number
-  col: number
-  row: number
   sprite: Sprite
+  container: Container
 }

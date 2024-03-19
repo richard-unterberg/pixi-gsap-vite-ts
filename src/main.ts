@@ -8,7 +8,7 @@ import './style.css'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class="p-3">here starts the client sided pixi v8 stage ✨</div>
-  <div id="stage"></div>
+  <div id="stage" class="border border-2 border-darkLight"></div>
 `
 
 if (document.readyState !== 'loading') {
