@@ -1,22 +1,51 @@
-import { Application } from 'pixi.js'
+import { animateGrid, animatePointerMove } from '#pixi/animation'
+import { createApp } from '#pixi/createApp'
+import { getCalculatedGrid } from '#pixi/getCalculatedGrid'
+import { getNeighbors, getTileOnPointer } from '#pixi/getTileOnPointer'
+import { getPixiGrid, setPixiGrid } from '#pixi/pixiGrid'
+import { PixiConfig } from '#src/lib/constants'
 
-export const initStage = async (stage: HTMLDivElement) => {
-  const app = new Application()
-  await app.init({
-    // fallback properties
-    width: 800,
-    height: 600,
+let previousHoveredTileId: number | null = null
 
-    // auto resize
-    resizeTo: stage,
-    autoDensity: true,
-    resolution: devicePixelRatio,
+export const handleMove = (boundingRect: DOMRect, event: PointerEvent) => {
+  const mouseX = event.clientX - boundingRect.left
+  const mouseY = event.clientY - boundingRect.top
+
+  const currentHoveredTileId = getTileOnPointer(mouseX, mouseY)
+  if (currentHoveredTileId === null || currentHoveredTileId === previousHoveredTileId) return
+
+  previousHoveredTileId = currentHoveredTileId
+
+  const neighbours = getNeighbors({
+    mouseX,
+    mouseY,
+    radius: 4,
   })
-  stage.appendChild(app.canvas)
-  // eslint-disable-next-line no-console
-  console.log({
-    stage,
+
+  animatePointerMove(neighbours)
+}
+
+export const initStage = async (stage: HTMLDivElement | null) => {
+  if (!stage) return
+
+  const app = await createApp(stage)
+  const tiles = await getCalculatedGrid(app)
+
+  // Set the grid
+  setPixiGrid({
     app,
+    stage,
+    tiles,
+    rowsCount: Math.ceil(app.renderer.height / PixiConfig.tileHeight),
+    colsCount: Math.ceil(app.renderer.width / PixiConfig.tileWidth),
+    tileHeight: PixiConfig.tileHeight,
+    tileWidth: PixiConfig.tileWidth,
   })
-  return app
+  animateGrid()
+
+  // eslint-disable-next-line no-console
+  console.log('grid', getPixiGrid())
+
+  stage.addEventListener('pointermove', event => handleMove(stage.getBoundingClientRect(), event))
+  stage.addEventListener('pointerdown', event => handleMove(stage.getBoundingClientRect(), event))
 }
