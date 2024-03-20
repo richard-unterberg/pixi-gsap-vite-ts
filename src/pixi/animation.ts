@@ -89,7 +89,6 @@ const animateHoverIn = ({ container, sprite, x, y }: AnimateHoverInProps) => {
   if (gsap.isTweening(sprite)) return
   gsap.killTweensOf(container)
   gsap.killTweensOf(sprite)
-  gsap.killTweensOf(sprite.scale)
 
   gsap.to(sprite, {
     x: Math.random() > 0.5 ? -widthToRendererRatio : widthToRendererRatio,
@@ -116,11 +115,7 @@ export const animateGrid = () => {
   const { tiles, app, tileWidth } = getPixiGrid()
 
   tiles.forEach(tile => {
-    const { container, sprite, x, y } = tile
-
-    gsap.killTweensOf(container)
-    gsap.killTweensOf(sprite)
-    gsap.killTweensOf(sprite.scale)
+    const { container, x, y } = tile
 
     // set values to tween from
     gsap.set(container, {

@@ -8,8 +8,6 @@ import { PixiConfig } from '#src/lib/constants'
 let previousHoveredTileId: number | null = null
 
 export const handleMove = (boundingRect: DOMRect, event: PointerEvent) => {
-  // eslint-disable-next-line no-console
-
   const mouseX = event.clientX - boundingRect.left
   const mouseY = event.clientY - boundingRect.top
 
@@ -38,8 +36,8 @@ export const initStage = async (stage: HTMLDivElement | null) => {
     app,
     stage,
     tiles,
-    rowsCount: Math.floor(app.renderer.height / PixiConfig.tileHeight + 1),
-    colsCount: Math.floor(app.renderer.width / PixiConfig.tileWidth + 1),
+    rowsCount: Math.ceil(app.renderer.height / PixiConfig.tileHeight),
+    colsCount: Math.ceil(app.renderer.width / PixiConfig.tileWidth),
     tileHeight: PixiConfig.tileHeight,
     tileWidth: PixiConfig.tileWidth,
   })

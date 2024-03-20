@@ -5,7 +5,6 @@ import { Application, Ticker, UPDATE_PRIORITY } from 'pixi.js'
 const subscribeToGSAPTicker = (app: Application) => {
   app.stage.removeChildren()
   app.ticker.stop()
-  app.stage.sortableChildren = true
 
   const stats = addStats(document, app)
   app.ticker.add(stats.update, stats, UPDATE_PRIORITY.UTILITY)
@@ -37,6 +36,7 @@ export const createApp = async (stage: HTMLDivElement) => {
     sharedTicker: true,
     backgroundColor: 0x020617,
   })
+  app.stage.sortableChildren = true
   stage.appendChild(app.canvas)
 
   subscribeToGSAPTicker(app)
