@@ -1,6 +1,6 @@
 import { animateGrid, animatePointerMove } from '#pixi/animation'
 import { createApp } from '#pixi/createApp'
-import { getCalculatedGrid } from '#pixi/getCalculatedGrid'
+import { createGrid } from '#pixi/createGrid'
 import { getNeighbors, getTileOnPointer } from '#pixi/getTileOnPointer'
 import { getPixiGrid, setPixiGrid } from '#pixi/pixiGrid'
 import { PixiConfig } from '#src/lib/constants'
@@ -29,7 +29,7 @@ export const initStage = async (stage: HTMLDivElement | null) => {
   if (!stage) return
 
   const app = await createApp(stage)
-  const tiles = await getCalculatedGrid(app)
+  const tiles = await createGrid(app)
 
   // Set the grid
   setPixiGrid({

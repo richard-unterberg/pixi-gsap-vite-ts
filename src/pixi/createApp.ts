@@ -1,13 +1,9 @@
 import gsap from 'gsap'
-import { addStats } from 'pixi-stats'
-import { Application, Ticker, UPDATE_PRIORITY } from 'pixi.js'
+import { Application, Ticker } from 'pixi.js'
 
 const subscribeToGSAPTicker = (app: Application) => {
   app.stage.removeChildren()
   app.ticker.stop()
-
-  const stats = addStats(document, app)
-  app.ticker.add(stats.update, stats, UPDATE_PRIORITY.UTILITY)
 
   gsap.ticker.remove(() => {
     app.ticker.update()
@@ -31,6 +27,7 @@ export const createApp = async (stage: HTMLDivElement) => {
     // auto resize
     resizeTo: stage,
     autoDensity: true,
+    hello: true,
     antialias: true,
     resolution: window.devicePixelRatio || 1,
     sharedTicker: true,

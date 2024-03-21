@@ -5,7 +5,7 @@ import { createSprite } from '#pixi/createSprite'
 import { Tile } from '#pixi/types'
 import { PixiConfig } from '#src/lib/constants'
 
-export const getCalculatedGrid = async (app: Application): Promise<Tile[]> => {
+export const createGrid = async (app: Application): Promise<Tile[]> => {
   const tilesPos: Tile[] = []
 
   let tileId = 0
