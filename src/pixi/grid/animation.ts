@@ -1,7 +1,7 @@
 import gsap from 'gsap'
 import { Container, Sprite } from 'pixi.js'
 
-import { getPixiGrid } from '#pixi/grid/pixiGrid'
+import { getStore } from '#pixi/store'
 import { R } from '#src/utils'
 
 interface AnimateSpriteIdleProps {
@@ -10,7 +10,7 @@ interface AnimateSpriteIdleProps {
 }
 
 const animateSpriteIdle = ({ container, x }: AnimateSpriteIdleProps) => {
-  const { app } = getPixiGrid()
+  const { app } = getStore()
   gsap.to(container, {
     x,
     y: app.renderer.height + R(40, 100), // to bottom w/ offset
@@ -54,7 +54,7 @@ interface AnimateHoverOutProps {
 }
 
 const animateHoverOut = ({ container, sprite, x, y }: AnimateHoverOutProps) => {
-  const { app, tileWidth } = getPixiGrid()
+  const { app, tileWidth } = getStore()
 
   gsap.to(container, {
     y: app.renderer.height + R(40, 100), // to bottom
@@ -92,9 +92,12 @@ const animateHoverIn = ({ container, sprite, x, y }: AnimateHoverInProps) => {
   const widthToRendererRatio = 100
   const heightToRendererRatio = 100
 
+  // todo: potential performance bottleneck
+  // try to improve this by storing playing / pausing timelines within the tile store
+  // instead of killing / adding tweens all over the place
   if (gsap.isTweening(sprite)) return
-  gsap.killTweensOf(container)
   gsap.killTweensOf(sprite)
+  gsap.killTweensOf(container)
 
   gsap.to(sprite, {
     x: Math.random() > 0.5 ? -widthToRendererRatio : widthToRendererRatio,
@@ -128,8 +131,8 @@ const animateScaleIdle = ({ container }: AnimateScaleIdleProps) => {
   })
 }
 
-export const animateGrid = () => {
-  const { tiles, app, tileWidth } = getPixiGrid()
+export const startGridAnimations = () => {
+  const { tiles, app, tileWidth } = getStore()
 
   tiles.forEach(tile => {
     const { container, x, y } = tile
@@ -152,8 +155,8 @@ export const animateGrid = () => {
   })
 }
 
-export const animatePointerMove = (triggerIDs: number[]) => {
-  const { tiles, tileWidth } = getPixiGrid()
+export const triggerAnimateTile = (triggerIDs: number[]) => {
+  const { tiles, tileWidth } = getStore()
 
   triggerIDs.forEach(id => {
     const { sprite, container, x, y } = tiles[id]

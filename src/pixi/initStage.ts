@@ -1,34 +1,42 @@
-import { initPointerMoveEvents } from '#pixi/grid/animation/pointer'
-import { animateGrid } from '#pixi/grid/animation/tile'
+import { startGridAnimations } from '#pixi/grid/animation'
 import { createGrid } from '#pixi/grid/createGrid'
-import { getPixiGrid, setPixiGrid } from '#pixi/grid/pixiGrid'
+import { initPointerMoveEvents } from '#pixi/grid/pointer'
+import { getStore, setStore } from '#pixi/store'
 import { createApp } from '#pixi/system/createApp'
 import { PixiConfig } from '#src/lib/constants'
 
 export const initStage = async (stage: HTMLDivElement | null) => {
   if (!stage) return
+  const { tileHeight, tileWidth } = PixiConfig
 
-  // build stage and grid
+  // build stage, grid, text chunks
   const app = await createApp(stage)
   const tiles = await createGrid(app)
 
   // set the grid config
-  setPixiGrid({
+  setStore({
     app,
     stage,
     tiles,
-    rowsCount: Math.ceil(app.renderer.height / PixiConfig.tileHeight),
-    colsCount: Math.ceil(app.renderer.width / PixiConfig.tileWidth),
-    tileHeight: PixiConfig.tileHeight,
-    tileWidth: PixiConfig.tileWidth,
+    rowsCount: Math.ceil(app.renderer.height / tileHeight),
+    colsCount: Math.ceil(app.renderer.width / tileWidth),
+    tileHeight,
+    tileWidth,
   })
 
   // trigger idle animations
-  animateGrid()
+  startGridAnimations()
 
   // trigger pointer events
   initPointerMoveEvents()
 
   // eslint-disable-next-line no-console
-  console.log('grid', getPixiGrid())
+  console.log('grid', getStore())
+
+  const tileCounElement = document.querySelector<HTMLDivElement>('#tileCount')
+  if (tileCounElement) {
+    tileCounElement.textContent = `currently ${tiles.length} sprites animated`
+  }
+
+  return getStore()
 }

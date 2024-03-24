@@ -1,17 +1,15 @@
-import { Application, Container } from 'pixi.js'
+import { Container } from 'pixi.js'
 
 export interface CreateContainerProps {
   x: number
   y: number
-  width: number
-  height: number
-  pivot?: number[]
-  app: Application
+  zIndex?: number
 }
 
-export const createContainer = ({ x, y }: CreateContainerProps) => {
+export const createContainer = async ({ x, y, zIndex = 1 }: CreateContainerProps) => {
   const container = new Container()
   container.x = x
   container.y = y
+  container.zIndex = zIndex
   return container
 }
