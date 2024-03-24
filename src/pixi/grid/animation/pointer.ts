@@ -1,4 +1,5 @@
-import { getPixiGrid } from '#pixi/pixiGrid'
+import { animatePointerMove } from '#pixi/grid/animation/tile'
+import { getPixiGrid } from '#pixi/grid/pixiGrid'
 
 interface GetAllNeighborsProps {
   mouseX: number
@@ -70,4 +71,41 @@ export const getTileOnPointer = (mouseX: number, mouseY: number): number | null 
     }
   }
   return null
+}
+
+let previousHoveredTileId: number | null = null
+/**
+ * Handles the pointer move event.
+ *
+ * @param boundingRect - The bounding rectangle of the element.
+ * @param event - The pointer event.
+ */
+export const handlePointerMove = (boundingRect: DOMRect, event: PointerEvent) => {
+  const mouseX = event.clientX - boundingRect.left
+  const mouseY = event.clientY - boundingRect.top
+
+  const currentHoveredTileId = getTileOnPointer(mouseX, mouseY)
+  if (currentHoveredTileId === null || currentHoveredTileId === previousHoveredTileId) return
+
+  previousHoveredTileId = currentHoveredTileId
+
+  const neighbours = getNeighbors({
+    mouseX,
+    mouseY,
+    radius: 4,
+  })
+
+  animatePointerMove(neighbours)
+}
+
+export const initPointerMoveEvents = () => {
+  const { stage } = getPixiGrid()
+
+  // handle mouse move
+  stage.addEventListener('pointermove', event =>
+    handlePointerMove(stage.getBoundingClientRect(), event),
+  )
+  stage.addEventListener('pointerdown', event =>
+    handlePointerMove(stage.getBoundingClientRect(), event),
+  )
 }

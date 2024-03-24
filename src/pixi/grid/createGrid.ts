@@ -1,7 +1,7 @@
 import { Application } from 'pixi.js'
 
-import { createContainer } from '#pixi/createContainer'
-import { createSprite } from '#pixi/createSprite'
+import { createContainer } from '#pixi/system/createContainer'
+import { createSprite } from '#pixi/system/createSprite'
 import { Tile } from '#pixi/types'
 import { PixiConfig } from '#src/lib/constants'
 

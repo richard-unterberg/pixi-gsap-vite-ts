@@ -1,12 +1,8 @@
 import gsap from 'gsap'
 import { Container, Sprite } from 'pixi.js'
 
-import { getPixiGrid } from '#pixi/pixiGrid'
+import { getPixiGrid } from '#pixi/grid/pixiGrid'
 import { R } from '#src/utils'
-
-const randomStartTimeout = (fnc: () => void) => {
-  setTimeout(fnc, R(0, 2000))
-}
 
 interface AnimateSpriteIdleProps {
   container: Container
@@ -17,7 +13,7 @@ const animateSpriteIdle = ({ container, x }: AnimateSpriteIdleProps) => {
   const { app } = getPixiGrid()
   gsap.to(container, {
     x,
-    y: app.renderer.height + R(40, 100), // to bottom
+    y: app.renderer.height + R(40, 100), // to bottom w/ offset
     alpha: 0,
     ease: 'bounce.out',
     yoyoEase: 'circ.out',
@@ -39,6 +35,7 @@ const animateSpriteIn = ({ container, x, y, tileWidth }: AnimateSpriteFadeInrops
   gsap.to(container, {
     x: x + R(0, tileWidth / 2),
     y,
+    delay: R(0, 2),
     ease: 'circ.out',
     rotation: 0,
     duration: R(1.6, 2.5),
@@ -51,24 +48,33 @@ const animateSpriteIn = ({ container, x, y, tileWidth }: AnimateSpriteFadeInrops
 
 interface AnimateHoverOutProps {
   container: Container
+  sprite: Sprite
   x: number
   y: number
 }
 
-const animateHoverOut = ({ container, x, y }: AnimateHoverOutProps) => {
+const animateHoverOut = ({ container, sprite, x, y }: AnimateHoverOutProps) => {
   const { app, tileWidth } = getPixiGrid()
+
   gsap.to(container, {
     y: app.renderer.height + R(40, 100), // to bottom
+    alpha: 0,
+    rotation: (R(-60, 60) * Math.PI) / 180,
     ease: 'circ.in',
-    duration: R(0.8, 1.4),
+    duration: R(0.4, 1),
     onComplete: () => {
-      randomStartTimeout(() => {
-        animateSpriteIn({
-          container,
-          x,
-          y,
-          tileWidth,
-        })
+      gsap.set(container, {
+        x,
+      })
+      gsap.set(sprite, {
+        x: 0,
+        y: 0,
+      })
+      animateSpriteIn({
+        container,
+        x,
+        y,
+        tileWidth,
       })
     },
   })
@@ -83,8 +89,8 @@ interface AnimateHoverInProps {
 }
 
 const animateHoverIn = ({ container, sprite, x, y }: AnimateHoverInProps) => {
-  const widthToRendererRatio = 200
-  const heightToRendererRatio = 200
+  const widthToRendererRatio = 100
+  const heightToRendererRatio = 100
 
   if (gsap.isTweening(sprite)) return
   gsap.killTweensOf(container)
@@ -98,16 +104,27 @@ const animateHoverIn = ({ container, sprite, x, y }: AnimateHoverInProps) => {
     onComplete: () => {
       animateHoverOut({
         container,
+        sprite,
         x,
         y,
       })
-      gsap.to(sprite, {
-        x: 0,
-        y: 0,
-        ease: 'power.in',
-        duration: R(0.8, 1.4),
-      })
     },
+  })
+}
+
+interface AnimateScaleIdleProps {
+  container: Container
+}
+
+const animateScaleIdle = ({ container }: AnimateScaleIdleProps) => {
+  const scaleShared = R(0.3, 1)
+  gsap.to(container.scale, {
+    x: scaleShared,
+    y: scaleShared,
+    delay: R(0, 2),
+    duration: R(0.6, 1),
+    repeat: -1,
+    yoyo: true,
   })
 }
 
@@ -125,24 +142,12 @@ export const animateGrid = () => {
       rotation: (R(-60, 60) * Math.PI) / 180,
     })
 
-    randomStartTimeout(() => {
-      animateSpriteIn({
-        container,
-        x,
-        y,
-        tileWidth,
-      })
-    })
-
-    randomStartTimeout(() => {
-      const scaleShared = R(0, 1)
-      gsap.to(container.scale, {
-        x: scaleShared,
-        y: scaleShared,
-        duration: R(0.6, 1),
-        repeat: -1,
-        yoyo: true,
-      })
+    animateScaleIdle({ container })
+    animateSpriteIn({
+      container,
+      x,
+      y,
+      tileWidth,
     })
   })
 }
