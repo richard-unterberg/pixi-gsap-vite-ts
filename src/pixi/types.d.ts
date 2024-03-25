@@ -6,4 +6,5 @@ export type Tile = {
   y: number
   sprite: Sprite
   container: Container
+  timelines: Timelines
 }

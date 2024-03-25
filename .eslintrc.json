@@ -32,7 +32,7 @@
     "no-else-return": 2,
     "arrow-body-style": 2,
     "no-use-before-define": 2,
-    "no-unused-vars": 2,
+    "no-unused-vars": 0,
     "object-shorthand": 2,
     "prettier/prettier": 2,
     "@typescript-eslint/naming-convention": 0,

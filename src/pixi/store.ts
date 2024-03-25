@@ -2,7 +2,7 @@ import { Application, Renderer } from 'pixi.js'
 
 import { Tile } from '#pixi/types'
 
-export type PixiGrid = {
+export type Store = {
   app: Application<Renderer>
   stage: HTMLDivElement
   tiles: Tile[]
@@ -12,6 +12,6 @@ export type PixiGrid = {
   tileHeight: number
 }
 
-let grid: PixiGrid
-export const setPixiGrid = (newGrid: PixiGrid) => (grid = newGrid)
-export const getPixiGrid = () => grid
+let store: Store
+export const setStore = (newStore: Store) => (store = newStore)
+export const getStore = () => store

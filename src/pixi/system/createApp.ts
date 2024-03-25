@@ -22,8 +22,8 @@ export const createApp = async (stage: HTMLDivElement) => {
   const app = new Application()
   await app.init({
     // fallback properties
-    width: 800,
-    height: 600,
+    width: 400,
+    height: 300,
     // auto resize
     resizeTo: stage,
     autoDensity: true,
@@ -31,7 +31,7 @@ export const createApp = async (stage: HTMLDivElement) => {
     antialias: true,
     resolution: window.devicePixelRatio || 1,
     sharedTicker: true,
-    backgroundColor: 0x020617,
+    backgroundAlpha: 0,
   })
   app.stage.sortableChildren = true
   stage.appendChild(app.canvas)

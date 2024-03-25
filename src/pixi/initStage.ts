@@ -1,51 +1,40 @@
-import { animateGrid, animatePointerMove } from '#pixi/animation'
-import { createApp } from '#pixi/createApp'
-import { createGrid } from '#pixi/createGrid'
-import { getNeighbors, getTileOnPointer } from '#pixi/getTileOnPointer'
-import { getPixiGrid, setPixiGrid } from '#pixi/pixiGrid'
+import { createGrid } from '#pixi/grid/createGrid'
+import { initPointerMoveEvents } from '#pixi/grid/pointer'
+import { createTimelines } from '#pixi/grid/timelines'
+import { getStore, setStore } from '#pixi/store'
+import { createApp } from '#pixi/system/createApp'
 import { PixiConfig } from '#src/lib/constants'
-
-let previousHoveredTileId: number | null = null
-
-export const handleMove = (boundingRect: DOMRect, event: PointerEvent) => {
-  const mouseX = event.clientX - boundingRect.left
-  const mouseY = event.clientY - boundingRect.top
-
-  const currentHoveredTileId = getTileOnPointer(mouseX, mouseY)
-  if (currentHoveredTileId === null || currentHoveredTileId === previousHoveredTileId) return
-
-  previousHoveredTileId = currentHoveredTileId
-
-  const neighbours = getNeighbors({
-    mouseX,
-    mouseY,
-    radius: 4,
-  })
-
-  animatePointerMove(neighbours)
-}
 
 export const initStage = async (stage: HTMLDivElement | null) => {
   if (!stage) return
+  const { tileHeight, tileWidth } = PixiConfig
 
+  // build stage, grid, text chunks
   const app = await createApp(stage)
   const tiles = await createGrid(app)
+  await createTimelines({ tiles, app })
 
-  // Set the grid
-  setPixiGrid({
+  // set the grid config
+  setStore({
     app,
     stage,
     tiles,
-    rowsCount: Math.ceil(app.renderer.height / PixiConfig.tileHeight),
-    colsCount: Math.ceil(app.renderer.width / PixiConfig.tileWidth),
-    tileHeight: PixiConfig.tileHeight,
-    tileWidth: PixiConfig.tileWidth,
+    rowsCount: Math.ceil(app.renderer.height / tileHeight),
+    colsCount: Math.ceil(app.renderer.width / tileWidth),
+    tileHeight,
+    tileWidth,
   })
-  animateGrid()
+
+  // trigger pointer events
+  initPointerMoveEvents()
 
   // eslint-disable-next-line no-console
-  console.log('grid', getPixiGrid())
+  console.log('grid', getStore())
 
-  stage.addEventListener('pointermove', event => handleMove(stage.getBoundingClientRect(), event))
-  stage.addEventListener('pointerdown', event => handleMove(stage.getBoundingClientRect(), event))
+  const tileCounElement = document.querySelector<HTMLDivElement>('#tileCount')
+  if (tileCounElement) {
+    tileCounElement.textContent = `currently ${tiles.length} sprites animated`
+  }
+
+  return getStore()
 }
