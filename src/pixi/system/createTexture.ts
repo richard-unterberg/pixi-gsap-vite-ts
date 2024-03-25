@@ -5,7 +5,7 @@ interface CreateTextureProps {
   app: Application
 }
 
-export const createTexture = async ({ text, app }: CreateTextureProps) => {
+export const createTexture = ({ text, app }: CreateTextureProps) => {
   const texture = app.renderer.generateTexture(text)
   return texture
 }

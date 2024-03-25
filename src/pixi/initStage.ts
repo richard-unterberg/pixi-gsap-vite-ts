@@ -11,8 +11,8 @@ export const initStage = async (stage: HTMLDivElement | null) => {
 
   // build stage, grid, text chunks
   const app = await createApp(stage)
-  const tiles = await createGrid(app)
-  await createTimelines({ tiles, app })
+  const tiles = createGrid(app)
+  createTimelines({ tiles, app })
 
   // set the grid config
   setStore({

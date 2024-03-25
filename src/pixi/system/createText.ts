@@ -10,7 +10,7 @@ export interface CreateTextProps {
   anchor?: number
 }
 
-export const createText = async ({ value, x = 0, y = 0, anchor = 0.5 }: CreateTextProps) => {
+export const createText = ({ value, x = 0, y = 0, anchor = 0.5 }: CreateTextProps) => {
   const { tileWidth } = PixiConfig
 
   const textBaseAtts = {

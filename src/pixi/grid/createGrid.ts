@@ -8,16 +8,16 @@ import { Tile } from '#pixi/types'
 import { PixiConfig } from '#src/lib/constants'
 import { R } from '#src/utils'
 
-export const createGrid = async (app: Application): Promise<Tile[]> => {
+export const createGrid = (app: Application) => {
   const { tileHeight, tileWidth, tileIcons } = PixiConfig
   const tilesPos: Tile[] = []
 
   const baseTextures: TextureSource[] = []
   for (const icon of tileIcons) {
-    const text = await createText({
+    const text = createText({
       value: icon,
     })
-    const texture = await createTexture({
+    const texture = createTexture({
       text,
       app,
     })
@@ -26,44 +26,37 @@ export const createGrid = async (app: Application): Promise<Tile[]> => {
   }
 
   let tileId = 0
-  const promises: Promise<void>[] = []
 
   for (let y = 0; y < app.renderer.height; y += tileHeight) {
     for (let x = 0; x < app.renderer.width; x += tileWidth) {
-      promises.push(
-        (async () => {
-          const container = await createContainer({
-            x,
-            y,
-            zIndex: R(5, 10),
-          })
+      const container = createContainer({
+        x,
+        y,
+        zIndex: R(5, 10),
+      })
 
-          const randomBaseTexture = baseTextures[Math.floor(Math.random() * baseTextures.length)]
-          const clonedTexture = Texture.from(randomBaseTexture)
+      const randomBaseTexture = baseTextures[Math.floor(Math.random() * baseTextures.length)]
+      const clonedTexture = Texture.from(randomBaseTexture)
 
-          const sprite = await createSprite({
-            width: tileWidth,
-            height: tileHeight,
-            texture: clonedTexture,
-          })
+      const sprite = createSprite({
+        width: tileWidth,
+        height: tileHeight,
+        texture: clonedTexture,
+      })
 
-          const tile = {
-            id: tileId++,
-            x,
-            y,
-            sprite,
-            container,
-          }
+      const tile = {
+        id: tileId++,
+        x,
+        y,
+        sprite,
+        container,
+      }
 
-          app.stage.addChild(container)
-          container.addChild(sprite)
-          tilesPos.push(tile)
-        })(),
-      )
+      app.stage.addChild(container)
+      container.addChild(sprite)
+      tilesPos.push(tile)
     }
   }
-
-  await Promise.all(promises)
 
   return tilesPos
 }

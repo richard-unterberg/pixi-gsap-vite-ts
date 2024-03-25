@@ -9,7 +9,7 @@ export interface CreateSpriteProps {
   anchor?: number
 }
 
-export const createSprite = async ({ x = 0, y = 0, texture, anchor = 0.5 }: CreateSpriteProps) => {
+export const createSprite = ({ x = 0, y = 0, texture, anchor = 0.5 }: CreateSpriteProps) => {
   const sprite = Sprite.from(texture)
   sprite.x = x
   sprite.y = y

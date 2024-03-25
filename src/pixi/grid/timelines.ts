@@ -20,7 +20,7 @@ interface CreateTimelinesProps {
   app: Application
 }
 
-export const createTimelines = async ({ tiles, app }: CreateTimelinesProps) => {
+export const createTimelines = ({ tiles, app }: CreateTimelinesProps) => {
   const { tileWidth } = PixiConfig
   const timelinesList: Timelines[] = []
 

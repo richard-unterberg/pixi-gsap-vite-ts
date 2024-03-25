@@ -6,7 +6,7 @@ export interface CreateContainerProps {
   zIndex?: number
 }
 
-export const createContainer = async ({ x, y, zIndex = 1 }: CreateContainerProps) => {
+export const createContainer = ({ x, y, zIndex = 1 }: CreateContainerProps) => {
   const container = new Container()
   container.x = x
   container.y = y
