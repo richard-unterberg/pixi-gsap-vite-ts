@@ -1,9 +1,9 @@
-const tileSize = 10
+const tileSize = 12
 
 export const PixiConfig = {
   tileWidth: tileSize,
   tileHeight: tileSize,
-  cursorRadius: 10,
+  cursorRadius: 5,
   tileIcons: [
     '😄',
     '🌞',
@@ -39,9 +39,5 @@ export const PixiConfig = {
     '😁',
     '😄',
     '😃',
-    'HOVER',
-    'THE',
-    'STAGE',
-    'HOVER',
   ],
 }

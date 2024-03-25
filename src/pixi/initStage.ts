@@ -1,6 +1,6 @@
-import { startGridAnimations } from '#pixi/grid/animation'
 import { createGrid } from '#pixi/grid/createGrid'
 import { initPointerMoveEvents } from '#pixi/grid/pointer'
+import { createTimelines } from '#pixi/grid/timelines'
 import { getStore, setStore } from '#pixi/store'
 import { createApp } from '#pixi/system/createApp'
 import { PixiConfig } from '#src/lib/constants'
@@ -12,6 +12,7 @@ export const initStage = async (stage: HTMLDivElement | null) => {
   // build stage, grid, text chunks
   const app = await createApp(stage)
   const tiles = await createGrid(app)
+  await createTimelines({ tiles, app })
 
   // set the grid config
   setStore({
@@ -23,9 +24,6 @@ export const initStage = async (stage: HTMLDivElement | null) => {
     tileHeight,
     tileWidth,
   })
-
-  // trigger idle animations
-  startGridAnimations()
 
   // trigger pointer events
   initPointerMoveEvents()

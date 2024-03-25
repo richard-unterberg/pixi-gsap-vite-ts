@@ -1,4 +1,4 @@
-import { triggerAnimateTile } from '#pixi/grid/animation'
+import { triggerAnimateHover } from '#pixi/grid/timelines'
 import { getStore } from '#pixi/store'
 import { PixiConfig } from '#src/lib/constants'
 
@@ -15,40 +15,6 @@ interface GetAllNeighborsProps {
  * @param radius - The radius within which to find neighboring tiles.
  * @returns An array of IDs representing the neighboring tiles.
  */
-// export const getNeighbors = ({ mouseX, mouseY, radius }: GetAllNeighborsProps): number[] => {
-//   const { tileHeight, tileWidth, colsCount, rowsCount } = getStore()
-
-//   const hitboxWidth = tileWidth * radius * 2 * 3
-//   const hitboxHeight = tileHeight * radius * 2 * 3
-
-//   const c = Math.floor(mouseX / tileWidth)
-//   const d = Math.floor(mouseY / tileHeight)
-
-//   // move internal hitbox
-//   const hitboxX = mouseX - tileWidth * radius
-//   const hitboxY = mouseY - tileHeight * radius
-
-//   // Calculate the range of neighbors within the hitbox boundaries
-//   const startCol = Math.max(0, Math.floor(hitboxX / tileWidth))
-//   const endCol = Math.min(colsCount - 1, Math.ceil((hitboxX + hitboxWidth) / tileWidth))
-//   const startRow = Math.max(0, Math.floor(hitboxY / tileHeight))
-//   const endRow = Math.min(rowsCount - 1, Math.ceil((hitboxY + hitboxHeight) / tileHeight))
-
-//   const neighbors: number[] = []
-//   for (let col = startCol; col <= endCol; col += 1) {
-//     for (let row = startRow; row <= endRow; row += 1) {
-//       const neighborPosition = row * colsCount + col
-//       const distance = Math.sqrt((c - col) ** 2 + (d - row) ** 2)
-
-//       if (distance <= radius) {
-//         const id = neighborPosition
-//         neighbors.push(id)
-//       }
-//     }
-//   }
-
-//   return neighbors
-// }
 export const getNeighbors = ({ mouseX, mouseY, radius }: GetAllNeighborsProps): number[] => {
   const { tileHeight, tileWidth, colsCount, rowsCount } = getStore()
 
@@ -129,7 +95,7 @@ export const handlePointerMove = (boundingRect: DOMRect, event: PointerEvent) =>
     radius: cursorRadius,
   })
 
-  triggerAnimateTile(neighbours)
+  triggerAnimateHover(neighbours)
 }
 
 export const initPointerMoveEvents = () => {
