@@ -3,7 +3,7 @@ import UnoCSS from 'unocss/vite'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/vite-pixi-ts', // remove for using root
+  base: '/pixi-gsap-vite-ts', // remove for using root
   plugins: [UnoCSS()],
   build: {
     cssMinify: 'esbuild',
