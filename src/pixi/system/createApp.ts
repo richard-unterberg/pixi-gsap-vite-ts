@@ -28,12 +28,14 @@ export const createApp = async (stage: HTMLDivElement) => {
     resizeTo: stage,
     autoDensity: true,
     hello: true,
-    antialias: true,
+    antialias: false, // adjust if really needed - performance killer <= webgl 2
     resolution: window.devicePixelRatio || 1,
     sharedTicker: true,
     backgroundAlpha: 0,
   })
   app.stage.sortableChildren = true
+  app.stage.interactive = false
+  app.stage.interactiveChildren = false
   stage.appendChild(app.canvas)
 
   subscribeToGSAPTicker(app)
